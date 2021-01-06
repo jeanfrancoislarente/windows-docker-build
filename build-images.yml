@@ -5,7 +5,6 @@ stages:
         variables:
           nodeVersion: "10.19.0"
           dockerHubRoot: "jflsitecore"
-          containerRegistry: "jflsitecore-dockerhub"
         strategy:
           matrix:
             windows2004:
@@ -26,7 +25,7 @@ stages:
         steps:
           - task: Docker@2
             inputs:
-              containerRegistry: '$(containerRegistry)'
+              containerRegistry: 'jflsitecore-dockerhub'
               repository: '$(dockerhubRoot)/nodejs-win'
               command: 'build'
               Dockerfile: '$(Build.SourcesDirectory)/node/Dockerfile'
@@ -36,7 +35,7 @@ stages:
               addPipelineData: false
           - task: Docker@2
             inputs:
-              containerRegistry: '$(containerRegistry)'
+              containerRegistry: 'jflsitecore-dockerhub'
               repository: '$(dockerhubRoot)/nodejs-win'
               command: 'push'
               tags: '$(nodeVersion)-$(nanoserverVersion)'
