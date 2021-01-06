@@ -4,6 +4,8 @@ stages:
       - job: Build_NodeJS
         variables:
           nodeVersion: "10.19.0"
+          dockerHubRoot: "jflsitecore"
+          containerRegistry: "jflsitecore-dockerhub"
         strategy:
           matrix:
             windows2004:
@@ -24,8 +26,8 @@ stages:
         steps:
           - task: Docker@2
             inputs:
-              containerRegistry: 'jflsitecore-dockerhub'
-              repository: 'nodejs-win'
+              containerRegistry: '$(containerRegistry)'
+              repository: '$(dockerhubRoot)/nodejs-win'
               command: 'build'
               Dockerfile: '$(Build.SourcesDirectory)/node/Dockerfile'
               buildContext: '$(Build.SourcesDirectory)/node'
@@ -34,13 +36,8 @@ stages:
               addPipelineData: false
           - task: Docker@2
             inputs:
-              containerRegistry: 'jflsitecore-dockerhub'
-              command: 'login'
-              addPipelineData: false
-          - task: Docker@2
-            inputs:
-              containerRegistry: 'jflsitecore-dockerhub'
-              repository: 'jflsitecore/nodejs-win'
+              containerRegistry: '$(containerRegistry)'
+              repository: '$(dockerhubRoot)/nodejs-win'
               command: 'push'
               tags: '$(nodeVersion)-$(nanoserverVersion)'
               addPipelineData: false
