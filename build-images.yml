@@ -25,7 +25,7 @@ stages:
           - task: Docker@2
             inputs:
               containerRegistry: 'jflsitecore-dockerhub'
-              repository: 'demo/build/nodejs'
+              repository: 'nodejs-win'
               command: 'build'
               Dockerfile: '$(Build.SourcesDirectory)/node/Dockerfile'
               buildContext: '$(Build.SourcesDirectory)/node'
@@ -35,7 +35,7 @@ stages:
           - task: Docker@2
             inputs:
               containerRegistry: 'jflsitecore-dockerhub'
-              repository: 'demo/build/nodejs'
+              repository: 'nodejs-win'
               command: 'push'
               tags: '$(nodeVersion)-$(nanoserverVersion)'
               addPipelineData: false
