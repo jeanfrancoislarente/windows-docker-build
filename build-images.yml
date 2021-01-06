@@ -1,0 +1,41 @@
+stages:
+  - stage: Build_Images
+    jobs:
+      - job: Build_NodeJS
+        variables:
+          nodeVersion: "10.19.0"
+        strategy:
+          matrix:
+            windows2004:
+              poolName: "docker-2004-agents"
+              osVersion: "2004"
+              nanoserverVersion: "2004"
+            ltsc2019:
+              poolName: "docker-ltsc2019-agents"
+              osVersion: "ltsc2019"
+              nanoserverVersion: "1809"
+            20H2:
+              poolName: "docker-20H2-agents"
+              osVersion: "2009"
+              nanoserverVersion: "2009"
+        displayName: "Build Windows Docker Images"
+        pool:
+          name: $(poolName)
+        steps:
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'docker-registry'
+              repository: 'demo/build/nodejs'
+              command: 'build'
+              Dockerfile: '$(Build.SourcesDirectory)/node/Dockerfile'
+              buildContext: '$(Build.SourcesDirectory)/node'
+              arguments: '--build-arg NODE_VERSION=10.19.0 --build-arg BUILD_IMAGE=mcr.microsoft.com/windows/servercore:$(osVersion) --build-arg BASE_IMAGE=mcr.microsoft.com/windows/nanoserver:$(nanoserverVersion)'
+              tags: '$(nodeVersion)-$(nanoserverVersion)'
+              addPipelineData: false
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'docker-registry'
+              repository: 'demo/build/nodejs'
+              command: 'push'
+              tags: '$(nodeVersion)-$(nanoserverVersion)'
+              addPipelineData: false
