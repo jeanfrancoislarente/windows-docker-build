@@ -40,7 +40,7 @@ stages:
           - task: Docker@2
             inputs:
               containerRegistry: 'jflsitecore-dockerhub'
-              repository: 'nodejs-win'
+              repository: 'jflsitecore/nodejs-win'
               command: 'push'
               tags: '$(nodeVersion)-$(nanoserverVersion)'
               addPipelineData: false
